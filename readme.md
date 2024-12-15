@@ -93,13 +93,13 @@ The following domains are blocked by default:
 ## **Screenshots**
 
 ### **Popup Interface**
-![Popup UI](https://via.placeholder.com/300x200?text=Popup+UI)
+![Popup UI](https://raw.githubusercontent.com/seanblowers-tech/AI-Blocker/refs/heads/main/popup.png)
 
 ### **Settings Page**
-![Settings UI](https://via.placeholder.com/600x400?text=Settings+Page)
+![Settings UI](https://raw.githubusercontent.com/seanblowers-tech/AI-Blocker/refs/heads/main/settings.png)
 
 ### **Custom Block Page**
-![Block Page](https://via.placeholder.com/600x400?text=Custom+Block+Page)
+![Block Page](https://raw.githubusercontent.com/seanblowers-tech/AI-Blocker/refs/heads/main/blocked.png)
 
 ---
 
