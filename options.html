@@ -2,123 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Manage AI Blocker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Blocklist</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
       font-family: Arial, sans-serif;
-      background-color: #1e1e1e;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin: 0;
       padding: 20px;
+      background-color: #f5f5f5;
+      color: #333;
     }
-
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      color: #4CAF50;
+      text-align: center;
     }
-
-    .container {
+    .list-container {
       display: flex;
-      justify-content: space-around;
-      width: 100%;
-      max-width: 900px;
+      justify-content: space-between;
+      margin-top: 20px;
     }
-
-    .column {
-      width: 30%;
-      background: #2c2c2c;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    .list {
+      flex: 1;
+      margin: 0 10px;
     }
-
-    h2 {
-      font-size: 1.5em;
-      margin-bottom: 10px;
-      border-bottom: 2px solid #4CAF50;
-      padding-bottom: 5px;
-    }
-
-    ul {
+    .list ul {
       list-style: none;
-      max-height: 200px;
-      overflow-y: auto;
       padding: 0;
     }
-
-    li {
+    .list li {
+      margin: 5px 0;
+      padding: 8px;
+      background: #fff;
+      border: 1px solid #ddd;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 5px 0;
-      background: #333;
+    }
+    .list li button {
+      background-color: #f44336;
+      color: white;
+      border: none;
       padding: 5px 10px;
       border-radius: 4px;
-    }
-
-    input {
-      width: 70%;
-      padding: 8px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 4px;
-    }
-
-    button {
-      padding: 6px 10px;
-      border: none;
-      border-radius: 4px;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 0.9em;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
-
-    button:hover {
-      background-color: #388E3C;
-    }
-
-    .remove-btn {
-      background-color: #f44336;
-    }
-
-    .remove-btn:hover {
+    .list li button:hover {
       background-color: #d32f2f;
-    }
-
-    .block-btn {
-      background-color: #FF9800;
-    }
-
-    .block-btn:hover {
-      background-color: #F57C00;
     }
   </style>
 </head>
 <body>
-  <h1>AI Blocker Settings</h1>
-  <div class="container">
-    <!-- Blocklist Column -->
-    <div class="column">
-      <h2>Blocklist</h2>
+  <h1>Manage Blocklist</h1>
+  <div>
+    <label for="blocklistInput">Add a domain to block:</label>
+    <input type="text" id="blocklistInput" placeholder="e.g., https://example.com">
+    <button id="addBlocklistButton">Add</button>
+    <p style="font-size: 0.9em; color: #888; margin-top: 5px;">
+      <strong>Note:</strong> Please include <code>https://</code> or <code>http://</code> before the domain name for the blocking to work correctly.
+    </p>
+  </div>
+  <div class="list-container">
+    <div class="list">
+      <h2>Blocked Domains</h2>
       <ul id="blocklist"></ul>
-      <input type="text" id="blocklistInput" placeholder="Add domain to blocklist">
-      <button id="addBlocklistButton">Add</button>
     </div>
-
-    <!-- Allowlist Column -->
-    <div class="column">
-      <h2>Allowlist</h2>
+    <div class="list">
+      <h2>Allowed Domains</h2>
       <ul id="allowlist"></ul>
     </div>
   </div>
