@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "AI Blocker",
   "version": "1.0",
-  "description": "AI Blocker is a Chrome extension that blocks websites and features related to advanced AI services. It provides customizable blocklists and allowlists for user control.",
+  "description": "AI Blocker is a Chrome extension that blocks AI-related websites and features. It includes customizable blocklists and allowlists for precise control.",
   "permissions": ["storage"],
   "host_permissions": ["<all_urls>"],
   "content_scripts": [

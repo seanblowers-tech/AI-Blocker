@@ -7,67 +7,68 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f5f5f5;
+      margin: 20px;
       color: #333;
+      background-color: #f5f5f5;
     }
     h1 {
       text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
     }
     .list-container {
       display: flex;
       justify-content: space-between;
-      margin-top: 20px;
     }
     .list {
       flex: 1;
-      margin: 0 10px;
+      margin: 10px;
     }
-    .list ul {
+    ul {
       list-style: none;
       padding: 0;
     }
-    .list li {
-      margin: 5px 0;
-      padding: 8px;
+    li {
       background: #fff;
+      padding: 10px;
+      margin: 5px 0;
       border: 1px solid #ddd;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      border-radius: 5px;
     }
-    .list li button {
-      background-color: #f44336;
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px;
+      background-color: #2196f3;
       color: white;
       border: none;
-      padding: 5px 10px;
-      border-radius: 4px;
+      border-radius: 5px;
       cursor: pointer;
-    }
-    .list li button:hover {
-      background-color: #d32f2f;
     }
   </style>
 </head>
 <body>
   <h1>Manage Blocklist</h1>
-  <div>
-    <label for="blocklistInput">Add a domain to block:</label>
-    <input type="text" id="blocklistInput" placeholder="e.g., https://example.com">
-    <button id="addBlocklistButton">Add</button>
-    <p style="font-size: 0.9em; color: #888; margin-top: 5px;">
-      <strong>Note:</strong> Please include <code>https://</code> or <code>http://</code> before the domain name for the blocking to work correctly.
-    </p>
-  </div>
-  <div class="list-container">
-    <div class="list">
-      <h2>Blocked Domains</h2>
-      <ul id="blocklist"></ul>
+  <div class="container">
+    <div>
+      <input type="text" id="blocklistInput" placeholder="e.g., https://example.com">
+      <button id="addBlocklistButton">Add to Blocklist</button>
     </div>
-    <div class="list">
-      <h2>Allowed Domains</h2>
-      <ul id="allowlist"></ul>
+    <div class="list-container">
+      <div class="list">
+        <h2>Blocked Sites</h2>
+        <ul id="blocklist"></ul>
+      </div>
+      <div class="list">
+        <h2>Allowed Sites</h2>
+        <ul id="allowlist"></ul>
+      </div>
     </div>
   </div>
   <script src="options.js"></script>

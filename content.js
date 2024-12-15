@@ -1,28 +1,27 @@
-// Default blocklist
-// Default blocklist for the personal version (with https:// included)
+// Expanded default blocklist with https:// included
 const DEFAULT_BLOCKLIST = [
-  "https://openai.com",          // OpenAI services
-  "https://chat.openai.com",     // ChatGPT
-  "https://bard.google.com",     // Google Bard
-  "https://gemini.google.com",   // Google's Gemini
-  "https://chatgpt.com",         // ChatGPT alternative domain
-  "https://anthropic.com",       // Anthropic Claude
-  "https://midjourney.com",      // MidJourney
-  "https://stability.ai",        // Stable Diffusion
-  "https://huggingface.co",      // Hugging Face
-  "https://runwayml.com",        // RunwayML
-  "https://perplexity.ai",       // Perplexity AI
-  "https://you.com",             // YouChat (AI-powered search)
-  "https://writesonic.com",      // Writesonic
-  "https://copy.ai",             // Copy AI
-  "https://jasper.ai",           // Jasper AI
-  "https://notion.so/ai",        // Notion AI
-  "https://character.ai",        // Character AI
-  "https://gptzero.me",          // GPTZero (AI detection tool)
-  "https://scribehow.com",       // Scribe AI
-  "https://play.ht",             // Play.ht (text-to-speech AI)
-  "https://d-id.com",            // D-ID (AI avatars)
-  "https://synthesia.io"         // Synthesia AI
+  "https://openai.com",
+  "https://chat.openai.com",
+  "https://bard.google.com",
+  "https://gemini.google.com",
+  "https://chatgpt.com",
+  "https://anthropic.com",
+  "https://midjourney.com",
+  "https://stability.ai",
+  "https://huggingface.co",
+  "https://runwayml.com",
+  "https://perplexity.ai",
+  "https://you.com",
+  "https://writesonic.com",
+  "https://copy.ai",
+  "https://jasper.ai",
+  "https://notion.so/ai",
+  "https://character.ai",
+  "https://gptzero.me",
+  "https://scribehow.com",
+  "https://play.ht",
+  "https://d-id.com",
+  "https://synthesia.io"
 ];
 
 // Fetch storage data
@@ -30,42 +29,20 @@ function fetchStorage(keys, callback) {
   chrome.storage.sync.get(keys, (data) => callback(data));
 }
 
-// Update storage
+// Update storage data
 function updateStorage(data, callback) {
   chrome.storage.sync.set(data, () => {
     if (callback) callback();
   });
 }
 
-// Add domain to allowlist and remove it from blocklist
-function addToAllowlist(domain) {
-  fetchStorage(["allowlist", "blocklist", "removedDefaults"], (data) => {
-    const allowlist = data.allowlist || [];
-    const blocklist = data.blocklist || [];
-    const removedDefaults = data.removedDefaults || [];
-
-    // Add to allowlist
-    if (!allowlist.includes(domain)) {
-      allowlist.push(domain);
-    }
-
-    // Remove from blocklist
-    const updatedBlocklist = blocklist.filter((item) => item !== domain);
-
-    // Track removed defaults if applicable
-    if (DEFAULT_BLOCKLIST.includes(domain) && !removedDefaults.includes(domain)) {
-      removedDefaults.push(domain);
-    }
-
-    updateStorage({ allowlist, blocklist: updatedBlocklist, removedDefaults }, () => {
-      console.log(`Added ${domain} to allowlist and removed from blocklist.`);
-      window.location.reload();
-    });
-  });
+// Check if a domain is blocked
+function isSiteBlocked(domain, blocklist) {
+  return blocklist.some((blockedDomain) => domain.includes(blockedDomain));
 }
 
-// Render custom blocking page
-function renderBlockingPage(currentDomain) {
+// Render block page
+function renderBlockingPage(domain) {
   document.head.innerHTML = "";
   document.body.innerHTML = "";
 
@@ -77,135 +54,88 @@ function renderBlockingPage(currentDomain) {
     align-items: center;
     height: 100vh;
     background-color: #1e1e1e;
-    color: #fff;
+    color: white;
     font-family: Arial, sans-serif;
     text-align: center;
   `;
 
   blockPage.innerHTML = `
-    <h1 style="font-size: 3em; margin-bottom: 20px; color: #ff4d4d;">
-      🚫 Blocked by AI Blocker
-    </h1>
-    <p style="font-size: 1.2em; margin-bottom: 30px;">
-      Access to <strong>${currentDomain}</strong> has been restricted.
-    </p>
+    <h1 style="font-size: 3em; color: #ff4d4d;">🚫 Blocked by AI Blocker</h1>
+    <p style="font-size: 1.2em; margin-bottom: 20px;">Access to <strong>${domain}</strong> is restricted.</p>
     <button id="allowSiteButton" style="
-      padding: 12px 20px; 
-      background-color: #4CAF50; 
-      color: white; 
-      border: none; 
-      border-radius: 8px;
-      font-size: 1.1em;
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
       cursor: pointer;
-      margin-bottom: 15px;
-    ">
-      Allow This Site
-    </button>
+      margin: 5px;
+    ">Allow This Site</button>
     <button id="backButton" style="
-      padding: 12px 20px; 
-      background-color: #f44336; 
-      color: white; 
-      border: none; 
-      border-radius: 8px;
-      font-size: 1.1em;
+      padding: 10px 20px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
       cursor: pointer;
-    ">
-      Go Back
-    </button>
+      margin: 5px;
+    ">Go Back</button>
   `;
 
   document.body.appendChild(blockPage);
 
   // Allow button functionality
   document.getElementById("allowSiteButton").addEventListener("click", () => {
-    console.log(`Allowing site: ${currentDomain}`);
-    addToAllowlist(currentDomain);
+    fetchStorage(["allowlist"], (data) => {
+      const allowlist = data.allowlist || [];
+      allowlist.push(domain);
+      updateStorage({ allowlist }, () => window.location.reload());
+    });
   });
 
   // Back button functionality
   document.getElementById("backButton").addEventListener("click", () => {
-    console.log("Going back to the previous page.");
     window.history.back();
   });
 }
 
-// Check if a site is in the blocklist
-function isSiteBlocked(domain, blocklist) {
-  return blocklist.some((blockedDomain) => domain.includes(blockedDomain));
+// Modify Google search queries to append "-ai"
+function modifyGoogleSearch() {
+  if (window.location.hostname === "www.google.com" && window.location.pathname === "/search") {
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get("q");
+
+    if (query && !query.includes("-ai")) {
+      urlParams.set("q", `${query} -ai`);
+      window.history.replaceState({}, "", `${window.location.pathname}?${urlParams.toString()}`);
+    }
+  }
 }
 
-// Initialize blocking logic
+// Main blocking logic
 function initializeBlocking() {
   const currentDomain = window.location.hostname;
-  console.log(`Checking blocklist for: ${currentDomain}`);
-
-  fetchStorage(["blocklist", "allowlist", "removedDefaults"], (data) => {
-    const userBlocklist = data.blocklist || [];
+  fetchStorage(["blocklist", "allowlist"], (data) => {
+    const blocklist = [...DEFAULT_BLOCKLIST, ...(data.blocklist || [])];
     const allowlist = data.allowlist || [];
-    const removedDefaults = data.removedDefaults || [];
 
-    // Combine default blocklist and user blocklist, excluding removed defaults
-    const combinedBlocklist = [
-      ...DEFAULT_BLOCKLIST.filter((domain) => !removedDefaults.includes(domain)),
-      ...userBlocklist,
-    ];
+    if (allowlist.includes(currentDomain)) return;
 
-    // If site is in the allowlist, skip blocking
-    if (isSiteBlocked(currentDomain, allowlist)) {
-      console.log(`Site allowed: ${currentDomain}`);
-      return;
-    }
-
-    // If site is in the combined blocklist, render block page
-    if (isSiteBlocked(currentDomain, combinedBlocklist)) {
-      console.log(`Site blocked: ${currentDomain}`);
+    if (isSiteBlocked(currentDomain, blocklist)) {
       renderBlockingPage(currentDomain);
-    } else {
-      console.log(`Site not blocked: ${currentDomain}`);
     }
   });
 }
 
-// Run blocking logic on page load
+// Initialize content script
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initializeBlocking);
+  document.addEventListener("DOMContentLoaded", () => {
+    initializeBlocking();
+    modifyGoogleSearch();
+  });
 } else {
   initializeBlocking();
+  modifyGoogleSearch();
 }
-
-// Function to append "-ai" to Google searches
-function modifyGoogleSearch() {
-  // Check if the current URL is a Google search page
-  if (window.location.hostname === "www.google.com" && window.location.pathname === "/search") {
-    const urlParams = new URLSearchParams(window.location.search);
-    let query = urlParams.get("q"); // Get the current search query
-
-    // Append "-ai" if it's not already in the query
-    if (query && !query.includes("-ai")) {
-      query += " -ai";
-      urlParams.set("q", query);
-
-      // Update the URL without reloading the page
-      window.history.replaceState({}, "", `${window.location.pathname}?${urlParams.toString()}`);
-
-      // Trigger a search update
-      document.dispatchEvent(new Event("input"));
-    }
-  }
-}
-
-// Initialize the search modification
-function initializeGoogleSearchModifier() {
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", modifyGoogleSearch);
-  } else {
-    modifyGoogleSearch();
-  }
-
-  // Observe URL changes to handle dynamic navigation
-  const observer = new MutationObserver(modifyGoogleSearch);
-  observer.observe(document.body, { childList: true, subtree: true });
-}
-
-// Initialize the extension functionality
-initializeGoogleSearchModifier();
