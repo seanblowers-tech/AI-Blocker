@@ -148,3 +148,40 @@ if (document.readyState === "loading") {
 } else {
   initializeBlocking();
 }
+
+// Function to append "-ai" to Google searches
+function modifyGoogleSearch() {
+  // Check if the current URL is a Google search page
+  if (window.location.hostname === "www.google.com" && window.location.pathname === "/search") {
+    const urlParams = new URLSearchParams(window.location.search);
+    let query = urlParams.get("q"); // Get the current search query
+
+    // Append "-ai" if it's not already in the query
+    if (query && !query.includes("-ai")) {
+      query += " -ai";
+      urlParams.set("q", query);
+
+      // Update the URL without reloading the page
+      window.history.replaceState({}, "", `${window.location.pathname}?${urlParams.toString()}`);
+
+      // Trigger a search update
+      document.dispatchEvent(new Event("input"));
+    }
+  }
+}
+
+// Initialize the search modification
+function initializeGoogleSearchModifier() {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", modifyGoogleSearch);
+  } else {
+    modifyGoogleSearch();
+  }
+
+  // Observe URL changes to handle dynamic navigation
+  const observer = new MutationObserver(modifyGoogleSearch);
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+
+// Initialize the extension functionality
+initializeGoogleSearchModifier();
