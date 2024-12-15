@@ -1,5 +1,29 @@
 // Default blocklist
-const DEFAULT_BLOCKLIST = ["openai.com", "bard.google.com", "gemini.google.com", "chatgpt.com"];
+// Default blocklist for the personal version (with https:// included)
+const DEFAULT_BLOCKLIST = [
+  "https://openai.com",          // OpenAI services
+  "https://chat.openai.com",     // ChatGPT
+  "https://bard.google.com",     // Google Bard
+  "https://gemini.google.com",   // Google's Gemini
+  "https://chatgpt.com",         // ChatGPT alternative domain
+  "https://anthropic.com",       // Anthropic Claude
+  "https://midjourney.com",      // MidJourney
+  "https://stability.ai",        // Stable Diffusion
+  "https://huggingface.co",      // Hugging Face
+  "https://runwayml.com",        // RunwayML
+  "https://perplexity.ai",       // Perplexity AI
+  "https://you.com",             // YouChat (AI-powered search)
+  "https://writesonic.com",      // Writesonic
+  "https://copy.ai",             // Copy AI
+  "https://jasper.ai",           // Jasper AI
+  "https://notion.so/ai",        // Notion AI
+  "https://character.ai",        // Character AI
+  "https://gptzero.me",          // GPTZero (AI detection tool)
+  "https://scribehow.com",       // Scribe AI
+  "https://play.ht",             // Play.ht (text-to-speech AI)
+  "https://d-id.com",            // D-ID (AI avatars)
+  "https://synthesia.io"         // Synthesia AI
+];
 
 // Fetch storage data
 function fetchStorage(keys, callback) {
